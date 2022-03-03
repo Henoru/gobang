@@ -91,11 +91,11 @@ def draw_menu(screen):
 def draw_win_title(screen,win):
   w=cols[14]+padding_left
   h=rows[14]+padding_top
-  winner=[("Black","White","Nobody")]
-  background_color=[(255,255,255),(0,0,0),(100,100,100)]
-  font_color=[(0,0,0),(255,255,255),(255,0,0)]
+  winner=("Black","White","Nobody")
+  background_color=((255,255,255),(0,0,0),(100,100,100))
+  font_color=((0,0,0),(255,255,255),(255,0,0))
   fontTitle=pygame.font.Font(r'Font\Bustracks-FREE-3.ttf',80)
-  titleFont=fontTitle.render(winner[Mod][win-1]+" win",True,font_color[win-1])
+  titleFont=fontTitle.render(winner[win-1]+" win",True,font_color[win-1])
   tw,th=titleFont.get_size() #标题大小
   pygame.draw.rect(screen,background_color[win-1],(0,h/2-th/2-10,w,th+20))
   screen.blit(titleFont,(w/2-tw/2,h/2-th/2))
