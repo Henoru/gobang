@@ -67,8 +67,44 @@ def get_pos_from_mouse(pos):
     if abs(cols[i]-pos[0])<=chess_size:
       y=i
   return x,y
+Mod=0 #模式选择 [PVP PVC CVP CVC] 默认为PVP
+def draw_menu(screen):
+  screen.fill((229,182,112))
+  w=cols[14]+padding_left
+  h=rows[14]+padding_top
+  fontTitle=pygame.font.Font(r'Font\Bustracks-FREE-3.ttf',150)
+  fontMod=pygame.font.Font(r'Font\Bustracks-FREE-3.ttf',40)
+  titleFont=fontTitle.render("Gobang",True,(255,0,0))
+  tw,th=titleFont.get_size() #标题大小
+  screen.blit(titleFont,(w/2-tw/2,h/4-th/2))
+  Modchoice=["Player Vs Player","Player Vs Computer","Computer Vs Player","Computer Vs Computer"]
+  Modchoice[Mod]=Modchoice[Mod]
+  print(Modchoice)
+  Modchoicefont=[fontMod.render(Modchoice[i],True,(0,0,0) if Mod==i else (127,127,127)) for i in range(4)]
+  sumhh=0
+  for i in range(4):
+    ww,hh=Modchoicefont[i].get_size()
+    screen.blit(Modchoicefont[i],(w/2-ww/2,h/2+sumhh))
+    sumhh=sumhh+hh+5
+  pygame.display.flip()
 def new_game_at_gui(screen):
   B=board()
+  global Mod
+  draw_menu(screen)
+  get_Enter=False
+  while not get_Enter:
+    for event in pygame.event.get():
+      if event.type==pygame.QUIT:
+        pygame.quit()
+      elif event.type==pygame.KEYDOWN:
+        if event.key==13:
+          get_Enter=True
+        elif event.key==119:
+          Mod=(Mod+3)%4
+          draw_menu(screen)
+        elif event.key==115:
+          Mod=(Mod+1)%4
+          draw_menu(screen)
   screen.fill((229,182,112))
   draw_lines(screen,points)
   draw_lines(screen,[[points[i][j] for i in range(15)] for j in range(15)])
@@ -93,10 +129,7 @@ def new_game_at_gui(screen):
   return True
 def play_with_gui():
   pygame.init()
-  screen=pygame.display.set_mode((600,600))
-  fontMod=pygame.font.Font(r'Font\思源宋体.otf',100)
-  fontInfo=pygame.font.Font(r'Font\思源宋体.otf',100)
-  Mod=0
-  while True:
+  screen=pygame.display.set_mode((cols[14]+padding_left,rows[14]+padding_top))
+  while new_game_at_gui(screen):
     None
 play_with_gui()
