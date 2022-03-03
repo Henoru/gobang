@@ -42,7 +42,7 @@ def play_at_terminals():
       break
 
 
-# 图形界面版本
+# 图形界面版本 可以直接改(应该)
 padding_top=50    #棋盘上边距
 padding_left=50   #棋盘左边距
 line_gap=30       #棋盘线距离
@@ -52,6 +52,7 @@ chess_colors=[(0,0,0),(255,255,255)] #棋子颜色
 rows=[padding_top+i*line_gap for i in range(15)]
 cols=[padding_left+j*line_gap for j in range(15)]
 points=[[(cols[j],rows[i]) for j in range(15)] for i in range(15)]
+
 def draw_a_line(screen,points):
   pygame.draw.lines(screen, (0,0,0), False,points,1)
 def draw_lines(screen,points):
@@ -68,6 +69,7 @@ def get_pos_from_mouse(pos):
       y=i
   return x,y
 Mod=0 #模式选择 [PVP PVC CVP CVC] 默认为PVP
+# 画菜单栏
 def draw_menu(screen):
   screen.fill((229,182,112))
   w=cols[14]+padding_left
@@ -86,6 +88,15 @@ def draw_menu(screen):
     ww,hh=Modchoicefont[i].get_size()
     screen.blit(Modchoicefont[i],(w/2-ww/2,h/2+sumhh))
     sumhh=sumhh+hh+5
+  pygame.display.flip()
+def draw_win_title(screen,win):
+  w=cols[14]+padding_left
+  h=rows[14]+padding_top
+  winner=[("Player1","Player2"),("Player","Computer"),("Computer","Player"),("Computer1","Computer2")]
+  fontTitle=pygame.font.Font(r'Font\Bustracks-FREE-3.ttf',150)
+  titleFont=fontTitle.render(winner[Mod][win-1],True,(255,0,0))
+  tw,th=titleFont.get_size() #标题大小
+  screen.blit(titleFont,(w/2-tw/2,h/2-th/2))
   pygame.display.flip()
 def new_game_at_gui(screen):
   B=board()
@@ -126,7 +137,16 @@ def new_game_at_gui(screen):
             win=cnt
             break
           cnt=3-cnt
-  return True
+  draw_win_title(screen,win)
+  #按任意键开始新游戏 懒得新建一个变量
+  get_Enter=False
+  while not get_Enter:
+    for event in pygame.event.get():
+      if event.type==pygame.QUIT:
+        pygame.quit()
+      elif event.type==pygame.KEYDOWN:
+        get_Enter=True
+#图形界面初始化和游戏循环过程
 def play_with_gui():
   pygame.init()
   screen=pygame.display.set_mode((cols[14]+padding_left,rows[14]+padding_top))
