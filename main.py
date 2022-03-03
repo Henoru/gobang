@@ -127,7 +127,7 @@ def new_game_at_gui(screen):
   player=[(Mod//2)%2,Mod%2]
   while not win:
     pos=(-1,-1)
-    B.write()
+    #B.write()
     if player[cnt-1]==0:
       while pos[0]==-1 or pos[1]==-1:
         for event in pygame.event.get():
@@ -140,6 +140,7 @@ def new_game_at_gui(screen):
         if event.type==pygame.QUIT:
           pygame.quit()
       pos=ai01.get_pos(B,cnt)
+      print(cnt,pos)
     if B.move(pos,cnt):
       draw_chess(screen,points[pos[0]][pos[1]],cnt)
       pygame.display.flip()
