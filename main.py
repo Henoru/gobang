@@ -81,7 +81,6 @@ def draw_menu(screen):
   screen.blit(titleFont,(w/2-tw/2,h/4-th/2))
   Modchoice=["Player Vs Player","Player Vs Computer","Computer Vs Player","Computer Vs Computer"]
   Modchoice[Mod]=Modchoice[Mod]
-  print(Modchoice)
   Modchoicefont=[fontMod.render(Modchoice[i],True,(0,0,0) if Mod==i else (127,127,127)) for i in range(4)]
   sumhh=0
   for i in range(4):
@@ -92,10 +91,13 @@ def draw_menu(screen):
 def draw_win_title(screen,win):
   w=cols[14]+padding_left
   h=rows[14]+padding_top
-  winner=[("Player1","Player2"),("Player","Computer"),("Computer","Player"),("Computer1","Computer2")]
-  fontTitle=pygame.font.Font(r'Font\Bustracks-FREE-3.ttf',150)
-  titleFont=fontTitle.render(winner[Mod][win-1],True,(255,0,0))
+  winner=[("Black","White","Nobody")]
+  background_color=[(255,255,255),(0,0,0),(100,100,100)]
+  font_color=[(0,0,0),(255,255,255),(255,0,0)]
+  fontTitle=pygame.font.Font(r'Font\Bustracks-FREE-3.ttf',80)
+  titleFont=fontTitle.render(winner[Mod][win-1]+" win",True,font_color[win-1])
   tw,th=titleFont.get_size() #标题大小
+  pygame.draw.rect(screen,background_color[win-1],(0,h/2-th/2-10,w,th+20))
   screen.blit(titleFont,(w/2-tw/2,h/2-th/2))
   pygame.display.flip()
 def new_game_at_gui(screen):
@@ -136,6 +138,9 @@ def new_game_at_gui(screen):
           if B.is_win(cnt):
             win=cnt
             break
+          if B.pos_left==0:
+            win=3
+            break
           cnt=3-cnt
   draw_win_title(screen,win)
   #按任意键开始新游戏 懒得新建一个变量
@@ -146,6 +151,7 @@ def new_game_at_gui(screen):
         pygame.quit()
       elif event.type==pygame.KEYDOWN:
         get_Enter=True
+  return True
 #图形界面初始化和游戏循环过程
 def play_with_gui():
   pygame.init()
