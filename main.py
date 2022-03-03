@@ -1,7 +1,7 @@
 import os
 from board import board
 import pygame
-
+import ai01
 
 # 命令行版本
 def clear():
@@ -99,7 +99,7 @@ def draw_win_title(screen,win):
   tw,th=titleFont.get_size() #标题大小
   pygame.draw.rect(screen,background_color[win-1],(0,h/2-th/2-10,w,th+20))
   screen.blit(titleFont,(w/2-tw/2,h/2-th/2))
-  pygame.display.flip()
+  pygame.display.update()
 def new_game_at_gui(screen):
   B=board()
   global Mod
@@ -124,24 +124,32 @@ def new_game_at_gui(screen):
   pygame.display.flip()
   cnt=1
   win=0
+  player=[(Mod//2)%2,Mod%2]
   while not win:
-    for event in pygame.event.get():
-      if event.type==pygame.QUIT:
-        pygame.quit()
-      elif event.type==pygame.MOUSEBUTTONDOWN:
-        pos=get_pos_from_mouse(event.pos)
-        if pos[0]==-1 or pos[1]==-1:
-          continue
-        if B.move(pos,cnt):
-          draw_chess(screen,points[pos[0]][pos[1]],cnt)
-          pygame.display.flip()
-          if B.is_win(cnt):
-            win=cnt
-            break
-          if B.pos_left==0:
-            win=3
-            break
-          cnt=3-cnt
+    pos=(-1,-1)
+    B.write()
+    if player[cnt-1]==0:
+      while pos[0]==-1 or pos[1]==-1:
+        for event in pygame.event.get():
+          if event.type==pygame.QUIT:
+            pygame.quit()
+          elif event.type==pygame.MOUSEBUTTONDOWN:
+            pos=get_pos_from_mouse(event.pos)
+    else:
+      for event in pygame.event.get():
+        if event.type==pygame.QUIT:
+          pygame.quit()
+      pos=ai01.get_pos(B,cnt)
+    if B.move(pos,cnt):
+      draw_chess(screen,points[pos[0]][pos[1]],cnt)
+      pygame.display.flip()
+      if B.is_win(cnt):
+        win=cnt
+        break
+      if B.is_full():
+        win=3
+        break
+      cnt=3-cnt
   draw_win_title(screen,win)
   #按任意键开始新游戏 懒得新建一个变量
   get_Enter=False

@@ -5,7 +5,6 @@ class board:
   WHITE=2
   def __init__(self):
     self.bd=[[0 for y in range(15)] for x in range(15)]
-    self.pos_left=15*15
   def write(self): #输出棋盘
     print(" ".join([" "]+[str(x) for x in range(10)]+[chr(ord('A')+x-10) for x in range(10,15)]))
     for i in range(2*15+1):
@@ -84,5 +83,19 @@ class board:
     if self.bd[x][y]!=self.EMPTY:
       return False
     self.bd[x][y]=tpy
-    self.pos_left=self.pos_left-1
+    return True
+  def delete(self,pos):
+    x,y=pos[0],pos[1]
+    self.bd[x][y]=self.EMPTY
+  def is_full(self):
+    for i in range(15):
+      for j in range(15):
+        if self.bd[i][j]==self.EMPTY:
+          return False
+    return True
+  def is_empty(self):
+    for i in range(15):
+      for j in range(15):
+        if self.bd[i][j]!=self.EMPTY:
+          return False
     return True
