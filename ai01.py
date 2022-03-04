@@ -1,7 +1,7 @@
 from board import board
 
 #搜索版AI
-depth=8 #最大搜索深度
+depth=4 #最大搜索深度
 cnt=0
 INF=1000000000 #最大值
 def calc(typ,lst):
@@ -69,7 +69,7 @@ def min_max_dfs(B:board,typ,d,alpha=-INF,beta=-INF): #棋盘 当前执方 当前
         search_list.append((evaluate(B,typ)-evaluate(B,3-typ),(i,j)))
         B.delete((i,j))
   search_list.sort(reverse=True)
-  width=2
+  width=10
   anspos=(-1,-1)
   ans=-INF
   for i in range(min(len(search_list),width)):
