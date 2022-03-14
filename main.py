@@ -1,8 +1,8 @@
 import os
 from board import board
 import pygame
-import ai01
-
+#import ai01
+import ai02
 # 命令行版本
 def clear():
   os.system('cls')
@@ -139,7 +139,7 @@ def new_game_at_gui(screen):
       for event in pygame.event.get():
         if event.type==pygame.QUIT:
           pygame.quit()
-      pos=ai01.get_pos(B,cnt)
+      pos=ai02.get_pos(B,cnt)
       print(cnt,pos)
     if B.move(pos,cnt):
       draw_chess(screen,points[pos[0]][pos[1]],cnt)

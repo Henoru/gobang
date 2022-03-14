@@ -1,7 +1,14 @@
+import imp
 from sympy import evaluate
 from board import board
 import ai01
+import ai02
 
+typ=1
 B=board()
-#print(ai01.evaluate(B,1))
-print(ai01.get_pos(B,1))
+while True:
+  print(ai01.get_pos(B,typ))
+  pos=ai02.get_pos(B,typ)
+  B.move(pos,typ)
+  print(pos)
+  typ=3-typ
