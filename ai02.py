@@ -1,7 +1,7 @@
 from board import board
 
 #搜索版AI
-depth=4 #最大搜索深度
+depth=6 #最大搜索深度
 cnt=0
 INF=1000000000 #最大值
 def calc(typ,lst):
@@ -36,10 +36,10 @@ def evaluate(B:board,typ)->int:
   '''
     evaluate the board(for chess typ)
   '''
-  global cnt
-  cnt=cnt+1
-  if cnt%1000==0:
-    print(cnt)
+  #global cnt
+  #cnt=cnt+1
+  #if cnt%1000==0:
+  #  print(cnt)
   ans=0
   for i in range(15):
     #横向搜索
@@ -58,9 +58,9 @@ def evaluate(B:board,typ)->int:
 def judge_pos(B:board,typ,pos)->int:
   def evapos(B:board,typ,pos):
     ans=0
-    ans=calc(typ,[B.bd[pos[0]][i] for i in range(15)])
-    ans=ans+calc(typ,[B.bd[i][pos[1]] for i in range(15)])
-    ans=ans+calc(typ,[B.bd[max(pos[0]-pos[1],0)+i][max(pos[1]-pos[0],0)+i] for i in range(15-abs(pos[0]-pos[1]))])
+    ans=calc(typ,[B[pos[0]][i] for i in range(15)])
+    ans=ans+calc(typ,[B[i][pos[1]] for i in range(15)])
+    ans=ans+calc(typ,[B[max(pos[0]-pos[1],0)+i][max(pos[1]-pos[0],0)+i] for i in range(15-abs(pos[0]-pos[1]))])
     x,y=pos[0],pos[1]
     A=[]
     for i in range(15):
@@ -69,7 +69,7 @@ def judge_pos(B:board,typ,pos)->int:
       if((x,y)==pos):
         break
     A.sort()
-    A=[B.bd[a[0]][a[1]] for a in A]
+    A=[B[a[0]][a[1]] for a in A]
     ans=ans+calc(typ,A)
     return ans
   ans=evapos(B,typ,pos)-evapos(B,3-typ,pos)
