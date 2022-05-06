@@ -1,5 +1,5 @@
 class board:
-  '棋盘'
+  '棋盘类'
   EMPTY=0
   BLACK=1
   WHITE=2
@@ -8,6 +8,7 @@ class board:
   def __getitem__(self,key):
     return self.bd[key]
   def write(self): #输出棋盘
+    '''在命令行打印棋盘 黑:o 白x'''
     print(" ".join([" "]+[str(x) for x in range(10)]+[chr(ord('A')+x-10) for x in range(10,15)]))
     for i in range(2*15+1):
       if i%2==0:
@@ -29,8 +30,10 @@ class board:
           print(' ',end="")
       print()
   def clear(self):
+    '''初始化为空白棋盘'''
     self.bd=[[0 for y in range(15)] for x in range(15)]
   def is_win(self,typ)->bool: #tpy玩家是否获得胜利
+    '''判断typ类型类是否五子连珠'''
     #横连五子
     for i in range(15):
       st=0
@@ -80,22 +83,26 @@ class board:
         else:
           st=j+1
     return False
-  def move(self,pos,tpy)->bool: #在pos位置下tpy棋，返回是否成功
+  def move(self,pos,typ)->bool: #在pos位置下tpy棋，返回是否成功
+    '''落子，在pos位置落typ类型的棋子'''
     x,y=pos[0],pos[1]
     if self[x][y]!=self.EMPTY:
       return False
-    self[x][y]=tpy
+    self[x][y]=typ
     return True
   def delete(self,pos):
+    '''移除pos位置的棋子'''
     x,y=pos[0],pos[1]
     self[x][y]=self.EMPTY
-  def is_full(self):
+  def is_full(self)->bool:
+    '''判断棋盘有无空位置'''
     for i in range(15):
       for j in range(15):
         if self[i][j]==self.EMPTY:
           return False
     return True
   def is_empty(self):
+    '''判断棋盘是否为空棋盘'''
     for i in range(15):
       for j in range(15):
         if self[i][j]!=self.EMPTY:

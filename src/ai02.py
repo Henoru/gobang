@@ -1,14 +1,15 @@
 from board import board
 
 #搜索版AI
-depth=6 #最大搜索深度
+depth=4 #最大搜索深度
+width=15 #最大搜索宽度
 cnt=0
 INF=1000000000 #最大值
 def calc(typ,lst):
   #连五 10000000
-  #活：(4,10000) (3,1000) (2,100) (1,10)
-  scr=(1,10,100,1000,10000,10000000)
-  #死：(4,1000) (3,100) (2,10) (1,1)
+  #活：(4,10005) (3,5000) (2,100) (1,10)
+  scr=(1,10,100,5000,10005,10000000)
+  #死：(4,5000) (3,100) (2,10) (1,2)
   EMPTY=0
   t=3-typ
   num=0
@@ -22,7 +23,7 @@ def calc(typ,lst):
       elif t==EMPTY and x==EMPTY: #活分
         ans=ans+scr[num]
       elif t==EMPTY or x==EMPTY: #死分
-        ans=ans+scr[num-1]
+        ans=ans+scr[num-1]-1
       t=x
       num=0
     else:
@@ -97,7 +98,6 @@ def min_max_dfs(B:board,typ,d,value,alpha=-INF,beta=-INF): #棋盘 当前执方 
         B.delete((i,j))
         search_list.append((judge_pos(B,typ,(i,j)),(i,j)))
   search_list.sort(reverse=True)
-  width=8
   anspos=(-1,-1)
   ans=-INF
   for i in range(min(len(search_list),width)):
