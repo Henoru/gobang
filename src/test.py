@@ -1,3 +1,6 @@
-import numpy as np
-a=np.zeros((15,15))
-print(a[:,0:1])
+from board import board
+B=board()
+C=board(B)
+print(C[0][0])
+B[0][0]=1
+print(B[0][0])

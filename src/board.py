@@ -4,10 +4,11 @@ class board:
   EMPTY=0
   BLACK=1
   WHITE=2
-  def __init__(self):
-    self.bd=np.zeros((15,15))
-  def __init__(self,B):
-    self.bd=B.bd.copy()
+  def __init__(self,B=0):
+    try:
+      self.bd=B.bd.copy()
+    except:
+      self.bd=np.zeros((15,15))
   def __getitem__(self,key):
     return self.bd[key]
   def clear(self):
