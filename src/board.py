@@ -8,7 +8,7 @@ class board:
     try:
       self.bd=B.bd.copy()
     except:
-      self.bd=np.zeros((15,15))
+      self.bd=np.zeros((15,15),dtype=np.int32)
   def __getitem__(self,key):
     return self.bd[key]
   def clear(self):

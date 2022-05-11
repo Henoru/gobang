@@ -1,19 +1,8 @@
 import numpy as np
 from board import board
 from const import *
+from model import calc
 c=5 # UCT搜索策略参数
-def transf(B,pos,typ):
-  blk=np.array([[1 if B[i][j]==board.BLACK else 0 for j in range(15)] for i in range(15)])
-  wht=np.array([[1 if B[i][j]==board.WHITE else 0 for j in range(15)] for i in range(15)])
-  epy=np.zeros((15,15))
-  if pos[0]!=-1: 
-    epy[pos[0]][pos[1]]=1
-  if typ==1:
-    T=np.zeros((15,15))
-  else:
-    T=np.ones((15,15))
-  ans=np.concatenate([blk,wht,epy,T]).reshape((4,15,15))
-  return torch.from_numpy(ans)
 class node:
   def __init__(self,fa,act,P,typ):
       self.fa=fa  # 结点的父亲
@@ -33,7 +22,7 @@ class node:
     index=np.argmax(np.asarray([c.uct() for c in self.chr]))
     return self.chr[index]
   def expand(self,B):
-      self.chr=[node(self,act,P,3-self.typ) for act,P in train.calc(transform(B))]
+      self.chr=[node(self,act,P,3-self.typ) for act,P in calc(B,self.act,self.typ)]
   def uct(self):
     return self.Q+CPUCT*self.P*np.sqrt(self.fa.N)/(self.N+1)
 def dirichlet_noise(props, eps=DLEPS, alpha=DLALPHA):
@@ -44,6 +33,7 @@ class MCTS:
   def dfs(self,B_:board,node):# 温度 
     self.rt=node
     for _ in range(self.MCTt):
+      print(_)
       cur=self.rt
       B=board(B_)
       win=0
@@ -54,7 +44,8 @@ class MCTS:
         if len(cur.chr)==0:
           cur.expand(B)
         cur=cur.select()
-        B.move(cur.act)
+        #print(cur.act)
+        B.move(cur.act,cur.typ)
       if win!=0:
         while cur:
           cur.backup(win)
