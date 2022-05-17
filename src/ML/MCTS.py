@@ -35,12 +35,10 @@ class MCTS:
   def dfs(self,B_:board,node):# 温度 
     self.rt=node
     while self.rt.N<self.MCTt:
-      depth=0
       cur=self.rt
       B=board(B_)
       win=0
       while not B.is_full():
-        depth+=1
         if B.is_win(3-cur.typ):
           win=1
           break
@@ -49,7 +47,6 @@ class MCTS:
         cur=cur.select()
         #print(cur.act)
         B.move(cur.act,cur.typ)
-      print(depth)
       while cur:
         cur.backup(win)
         win*=-1

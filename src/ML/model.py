@@ -71,20 +71,18 @@ def transf(B,pos,typ):
     T=np.ones((15,15))
   ans=np.concatenate([blk,wht,epy,T]).reshape((4,15,15))
   return torch.from_numpy(ans)
-def calcloss(P,output):
-  
 def train(net,data):
   def update(input,P):
     input=torch.from_numpy(input)
     p=P.copy()
     p=torch.from_numpy(np.reshape(p,(15*15)))   
     output=net(input)
-    loss=calcloss(p,output)
+    loss=nn.CrossEntropyLoss(output,p)
     loss.backward()
     opt.step()
     opt.zero_grad()
   lr_rate=0.02
-  opt=torch.optim.SGD(net.parameters(),lr=lr_rate)
+  opt=torch.optim.SGD(net.parameters(),lr=lr_rate,weight_decay=2)
   for B,P,pos,typ in data:
     P=np.reshape(P,(15,15))
     blk=np.where(B.bd==board.BLACK,1,0)

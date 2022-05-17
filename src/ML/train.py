@@ -14,6 +14,7 @@ while True:
     cur=cur.select()
     B.move(cur.act,cur.fa.typ)
   else:
+    print(B.is_win(1))
     train(net,data)
     torch.save(net,"model.pth")
     B=board()
