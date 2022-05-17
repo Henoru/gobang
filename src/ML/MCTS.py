@@ -1,3 +1,4 @@
+from turtle import pen, penup
 import numpy as np
 from board import board
 from const import *
@@ -33,11 +34,13 @@ class MCTS:
     self.MCTt=MCTt
   def dfs(self,B_:board,node):# 温度 
     self.rt=node
-    for _ in range(self.MCTt):
+    while self.rt.N<self.MCTt:
+      depth=0
       cur=self.rt
       B=board(B_)
       win=0
       while not B.is_full():
+        depth+=1
         if B.is_win(3-cur.typ):
           win=1
           break
@@ -46,11 +49,15 @@ class MCTS:
         cur=cur.select()
         #print(cur.act)
         B.move(cur.act,cur.typ)
+      print(depth)
       while cur:
         cur.backup(win)
         win*=-1
         cur=cur.fa
-    ans=[(x.act,x.N/self.MCTt) for x in self.rt.chr]
+    ans=np.zeros(15*15)
+    for x in self.rt.chr:
+      ans[x.act[0]*15+x.act[1]]=x.Q
+    dirichlet_noise(ans)
     return ans
     
       
