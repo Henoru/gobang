@@ -37,9 +37,9 @@ class CNN(nn.Module):
       nn.MaxPool2d(kernel_size=2),
     )
     self.conv4=ResidualBlock(32,32)
-    #self.conv5=ResidualBlock(32,32)
-    #self.conv6=ResidualBlock(32,32)
-    #self.conv7=ResidualBlock(32,32)
+    self.conv5=ResidualBlock(32,32)
+    self.conv6=ResidualBlock(32,32)
+    self.conv7=ResidualBlock(32,32)
     self.conv8=self.conv2=nn.Sequential(
       nn.Conv2d(32,16,5,1,2),
       nn.ReLU(),
@@ -51,14 +51,13 @@ class CNN(nn.Module):
     x=self.cconv2(x)
     x=self.conv3(x)
     x=self.conv4(x)
-    #x=self.conv5(x)
-    #x=self.conv6(x)
-    #x=self.conv7(x)
+    x=self.conv5(x)
+    x=self.conv6(x)
+    x=self.conv7(x)
     x=self.conv8(x)
     x=x.reshape(-1)
     output=self.out(x)
     return output
-net=CNN()
 def transf(B,pos,typ):
   blk=np.array([[1 if B[i][j]==board.BLACK else 0 for j in range(15)] for i in range(15)])
   wht=np.array([[1 if B[i][j]==board.WHITE else 0 for j in range(15)] for i in range(15)])
@@ -71,7 +70,7 @@ def transf(B,pos,typ):
     T=np.ones((15,15))
   ans=np.concatenate([blk,wht,epy,T]).reshape((4,15,15))
   return torch.from_numpy(ans)
-def calc(B:board,pos,typ,net=net):
+def calc(B:board,pos,typ,net):
   B_=board(B)
   _=transf(B,pos,typ)
   ans=net.forward(_).detach().numpy()

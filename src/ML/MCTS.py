@@ -2,7 +2,7 @@ import numpy as np
 from board import board
 from const import *
 from model import calc
-c=5 # UCT搜索策略参数
+#c=5 # UCT搜索策略参数
 class node:
   def __init__(self,fa,act,P,typ):
       self.fa=fa  # 结点的父亲
@@ -21,19 +21,19 @@ class node:
   def select(self):
     index=np.argmax(np.asarray([c.uct() for c in self.chr]))
     return self.chr[index]
-  def expand(self,B):
-      self.chr=[node(self,act,P,3-self.typ) for act,P in calc(B,self.act,self.typ)]
+  def expand(self,B,net):
+      self.chr=[node(self,act,P,3-self.typ) for act,P in calc(B,self.act,self.typ,net)]
   def uct(self):
     return self.Q+CPUCT*self.P*np.sqrt(self.fa.N)/(self.N+1)
 def dirichlet_noise(props, eps=DLEPS, alpha=DLALPHA):
   return (1 - eps) * props + eps * np.random.dirichlet(np.full(len(props), alpha))
 class MCTS:
-  def __init__(self,MCTt=MCTSTIMES):
+  def __init__(self,net,MCTt=MCTSTIMES):
+    self.net=net
     self.MCTt=MCTt
   def dfs(self,B_:board,node):# 温度 
     self.rt=node
     for _ in range(self.MCTt):
-      print(_)
       cur=self.rt
       B=board(B_)
       win=0
@@ -42,15 +42,14 @@ class MCTS:
           win=1
           break
         if len(cur.chr)==0:
-          cur.expand(B)
+          cur.expand(B,self.net)
         cur=cur.select()
         #print(cur.act)
         B.move(cur.act,cur.typ)
-      if win!=0:
-        while cur:
-          cur.backup(win)
-          win*=-1
-          cur=cur.fa
+      while cur:
+        cur.backup(win)
+        win*=-1
+        cur=cur.fa
     ans=[(x.act,x.N/self.MCTt) for x in self.rt.chr]
     return ans
     
