@@ -35,15 +35,18 @@ class MCTS:
   def dfs(self,B_:board,node):# 温度 
     self.rt=node
     while self.rt.N<self.MCTt:
+      # print(self.rt.N)
       cur=self.rt
       B=board(B_)
       win=0
-      while not B.is_full():
+      while True:
         if B.is_win(3-cur.typ):
           win=1
           break
         if len(cur.chr)==0:
           cur.expand(B,self.net)
+          if len(cur.chr)==0:
+            break
         cur=cur.select()
         #print(cur.act)
         B.move(cur.act,cur.typ)
@@ -53,8 +56,12 @@ class MCTS:
         cur=cur.fa
     ans=np.zeros(15*15)
     for x in self.rt.chr:
-      ans[x.act[0]*15+x.act[1]]=x.Q
-    dirichlet_noise(ans)
+      ans[x.act[0]*15+x.act[1]]=x.N/self.rt.N
+    # print(ans)
+    # dirichlet_noise(ans)
+    # print(ans)
+    # ans=ans/ans.sum()
+    # print(ans)
     return ans
     
       

@@ -45,7 +45,11 @@ class CNN(nn.Module):
       nn.Conv2d(32,16,5,1,2),
       nn.ReLU(),
     )
-    self.out=nn.Linear(144,15*15)
+    self.out=nn.Sequential(
+      nn.Linear(144,15*15),
+      nn.ReLU(),
+      nn.Softmax(dim=-1),
+    )
   def forward(self,x):
     x=x.to(torch.float32)
     x=self.conv1(x)
@@ -75,15 +79,19 @@ def train(net,data):
   def update(input,P):
     input=torch.from_numpy(input)
     p=P.copy()
-    p=torch.from_numpy(np.reshape(p,(15*15)))   
+    p=torch.from_numpy(np.reshape(p,(15*15)))
     output=net(input)
-    loss=nn.CrossEntropyLoss(output,p)
+    print(output,p)
+    loss=(output*nn.LogSoftmax(dim=-1)(p)).sum()
+    print(loss)
+    opt.zero_grad()
     loss.backward()
     opt.step()
-    opt.zero_grad()
   lr_rate=0.02
-  opt=torch.optim.SGD(net.parameters(),lr=lr_rate,weight_decay=2)
+  opt=torch.optim.SGD(net.parameters(),lr=lr_rate,weight_decay=1)
+  # criteria=nn.CrossEntropyLoss()
   for B,P,pos,typ in data:
+    # print(P)
     P=np.reshape(P,(15,15))
     blk=np.where(B.bd==board.BLACK,1,0)
     wht=np.where(B.bd==board.WHITE,1,0)
