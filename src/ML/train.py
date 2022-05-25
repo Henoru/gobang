@@ -2,28 +2,30 @@ from model import *
 from board import board
 import MCTS
 B=board()
-net=torch.load("model.pth")
+net=torch.load(".\src\ML\model.pth")
+# print(net.state_dict())
 typ=1
 cur=MCTS.node(None,(-1,-1),1,typ)
 tr=MCTS.MCTS(net)
 print(calc(B,(0,0),1,net))
 data=[]
+cnt=0
 while True:
-  tr.dfs(B,cur)
-  # data.append((B,tr.dfs(B,cur),cur.act,cur.typ))
-  test=np.zeros((15,15))
-  test[0][0]=1
-  data.append((B,test,cur.act,cur.typ))
+  cnt+=1
+  data.append((B,tr.dfs(B,cur),cur.act,cur.typ))
+  print(cnt,len(data))
   if len(cur.chr):
     cur=cur.select()
     B.move(cur.act,cur.fa.typ)
     cur.fa=None
-    # sprint(B.bd)
   else:
     train(net,data)
-    torch.save(net,"model.pth")
+    data=[]
+    # print(net.state_dict())
+    torch.save(net,".\src\ML\model.pth")
     B=board()
     print(calc(B,(0,0),1,net))
+    cnt=0
     cur=MCTS.node(None,(-1,-1),1,typ)
 
 
