@@ -83,8 +83,8 @@ class Mydata(Dataset):
 def train(net,data):
   torch.set_grad_enabled(True)
   Data=Mydata(data)
-  Datas=torch.utils.data.DataLoader(Data,batch_size=20,shuffle=True,drop_last=False)
-  lr_rate,epochs=0.02,50
+  Datas=torch.utils.data.DataLoader(Data,batch_size=10,shuffle=True,drop_last=False)
+  lr_rate,epochs=0.01,200
   opt=torch.optim.SGD(net.parameters(),lr=lr_rate,weight_decay=1)
   # criteria=nn.CrossEntropyLoss()
   loss_func=nn.LogSoftmax(dim=1)

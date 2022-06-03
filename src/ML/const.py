@@ -3,7 +3,7 @@ import torch
 SIZE=15
 
 # MCTS
-CPUCT=5           # UCB计算系数
+CPUCT=3           # UCB计算系数
 MCTSTIMES = 100   # MCTS模拟次数
 
 # Dirichlet

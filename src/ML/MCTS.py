@@ -1,4 +1,3 @@
-from turtle import pen, penup
 import numpy as np
 from board import board
 from const import *
@@ -32,7 +31,7 @@ class MCTS:
   def __init__(self,net,MCTt=MCTSTIMES):
     self.net=net
     self.MCTt=MCTt
-  def dfs(self,B_:board,node):# 温度 
+  def dfs(self,B_:board,node):
     self.rt=node
     while self.rt.N<self.MCTt:
       # print(self.rt.N)
@@ -63,7 +62,28 @@ class MCTS:
     # ans=ans/ans.sum()
     # print(ans)
     return ans
-    
+  def dfsForPlayer(self,B_:board,node):
+    self.rt=node
+    while self.rt.N<self.MCTt:
+      cur=self.rt
+      B=board(B_)
+      win=0
+      while True:
+        # print("haha")
+        if B.is_win(3-cur.typ):
+          win=1
+          break
+        if len(cur.chr)==0:
+          cur.expand(B,self.net)
+          if len(cur.chr)==0:
+            break
+        cur=cur.select()
+        B.move(cur.act,cur.typ)
+      while cur:
+        cur.backup(win)
+        win*=-1
+        cur=cur.fa
+    return self.rt.select().act
       
 
       

@@ -1,26 +1,38 @@
 ## Gobang
+
 五子棋小程序
 支持玩家对战和人机对战
 
 ### 环境依赖
+
 ```
 pip install -r requirements.txt
 ```
+
 ### 游戏运行
+
 ```
-python src/main.py
+python3 src/main.py
 ```
+
 ### 操作指南
+
 #### 目录界面:
+
 通过w/s选择模式
 回车确认模式
+
 #### 游玩界面
+
 鼠标点击操作
 结束后按任意键返回
+
 #### 退出游戏
+
 暴力点关闭按钮
 
 ### 文件结构
+
 ```
 ├─Font  字体素材
 ├─img   图片素材
@@ -33,13 +45,18 @@ python src/main.py
 -report.md    实验报告文件
 -report.pdf   实验报告pdf
 ```
+
 ### 自定义AI方法
+
 main.py第三行
+
 ```python
 import ai02 as ai
 ```
+
 将ai02修改为自定义AI模块
 要求模块包含函数:
+
 ```python
 def get_pos(B:board,typ:int)->tuple:
   pass

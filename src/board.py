@@ -9,6 +9,7 @@ class board:
       self.bd=B.bd.copy()
     except:
       self.bd=np.zeros((15,15),dtype=np.int32)
+    self.acts=[(-1,-1)]
   def __getitem__(self,key):
     return self.bd[key]
   def clear(self):
@@ -53,11 +54,16 @@ class board:
     if self[x][y]!=self.EMPTY:
       return False
     self[x][y]=typ
+    self.acts.append(pos)
     return True
   def delete(self,pos):
     '''移除pos位置的棋子'''
     x,y=pos[0],pos[1]
     self[x][y]=self.EMPTY
+    try:
+      self.acts.remove(pos)
+    except:
+      pass
   def is_full(self)->bool:
     '''判断棋盘有无空位置'''
     return np.min(self.bd)!=0

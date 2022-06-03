@@ -2,7 +2,7 @@ import os
 from board import board
 import pygame
 #import ai01
-import ai02 as ai           # AI模块
+import Ai as ai           # AI模块
 from graphics import *      # 图形化模块
 # 命令行版本(已废用)
 def clear():

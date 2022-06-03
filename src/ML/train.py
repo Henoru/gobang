@@ -13,6 +13,7 @@ cnt=0
 while True:
   cnt+=1
   data.append((B,tr.dfs(B,cur),cur.act,cur.typ))
+  print(B.bd,data[-1][1])
   print(cnt,len(data))
   if len(cur.chr):
     cur=cur.select()
